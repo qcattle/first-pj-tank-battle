@@ -534,7 +534,85 @@
     document.getElementById('left').textContent = Math.max(0, TOTAL_ENEMIES - killedCount);
   }
 
-  // ================= 输入 =================
+  
+  // ================= 触屏控制 =================
+  function setupTouchControls() {
+    const dirKeyMap = {
+      up:    'ArrowUp',
+      down:  'ArrowDown',
+      left:  'ArrowLeft',
+      right: 'ArrowRight',
+    };
+
+    // ---------- 方向按钮 ----------
+    document.querySelectorAll('.dpad-btn').forEach(btn => {
+      const dir = btn.dataset.dir;
+      const key = dirKeyMap[dir];
+      if (!key) return;
+
+      function press(e) {
+        e.preventDefault();
+        keys[key] = true;
+        btn.classList.add('pressed');
+      }
+      function release(e) {
+        e.preventDefault();
+        keys[key] = false;
+        btn.classList.remove('pressed');
+      }
+
+      btn.addEventListener('touchstart', press, { passive: false });
+      btn.addEventListener('touchend',   release, { passive: false });
+      btn.addEventListener('touchcancel', release, { passive: false });
+      btn.addEventListener('mousedown',  press);
+      btn.addEventListener('mouseup',    release);
+      btn.addEventListener('mouseleave', release);
+    });
+
+    // ---------- 射击按钮 ----------
+    const fireBtn = document.getElementById('fireBtn');
+    if (fireBtn) {
+      function pressFire(e) {
+        e.preventDefault();
+        keys['Space'] = true;
+        fireBtn.classList.add('pressed');
+      }
+      function releaseFire(e) {
+        e.preventDefault();
+        keys['Space'] = false;
+        fireBtn.classList.remove('pressed');
+      }
+
+      fireBtn.addEventListener('touchstart', pressFire, { passive: false });
+      fireBtn.addEventListener('touchend',   releaseFire, { passive: false });
+      fireBtn.addEventListener('touchcancel', releaseFire, { passive: false });
+      fireBtn.addEventListener('mousedown',  pressFire);
+      fireBtn.addEventListener('mouseup',    releaseFire);
+      fireBtn.addEventListener('mouseleave', releaseFire);
+    }
+
+    // ---------- 重启按钮 ----------
+    const restartBtn = document.getElementById('restartBtn');
+    if (restartBtn) {
+      restartBtn.addEventListener('click', e => {
+        e.preventDefault();
+        if (state === 'over' || state === 'win') {
+          initGame();
+        }
+      });
+    }
+
+    // ---------- 阻止画布上的默认触摸行为 ----------
+    const canvas = document.getElementById('game');
+    canvas.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+    canvas.addEventListener('touchmove',  e => e.preventDefault(), { passive: false });
+    canvas.addEventListener('touchend',   e => e.preventDefault(), { passive: false });
+  }
+
+  // 启动触屏控制
+  setupTouchControls();
+
+// ================= 输入 =================
   window.addEventListener('keydown', e => {
     keys[e.code] = true;
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
