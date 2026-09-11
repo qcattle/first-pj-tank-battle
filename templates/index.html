@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>坦克大战</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="wrap">
+    <div class="hud">
+      <span>分数 <b id="score">0</b></span>
+      <span>生命 <b id="lives">3</b></span>
+      <span>剩余敌人 <b id="left">10</b></span>
+    </div>
+
+    <canvas id="game"></canvas>
+
+    <div class="tip">WASD / 方向键 移动 · 空格 射击 · R 重新开始</div>
+  </div>
+
+  <script src="{{ url_for('static', filename='game.js') }}"></script>
+</body>
+</html>
