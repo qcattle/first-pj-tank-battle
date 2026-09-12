@@ -6,7 +6,6 @@ body {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  padding-bottom: 140px;
   background: radial-gradient(circle at 50% 0%, #1e293b, #0b1120 70%);
   color: #e2e8f0;
   font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
@@ -30,11 +29,7 @@ body {
   font-size: 15px;
   letter-spacing: 1px;
 }
-
-.hud b {
-  color: #4ade80;
-  font-size: 18px;
-}
+.hud b { color: #4ade80; font-size: 18px; }
 
 canvas {
   display: block;
@@ -46,140 +41,8 @@ canvas {
   box-shadow: 0 14px 40px rgba(0, 0, 0, .65);
 }
 
-.tip {
-  font-size: 13px;
-  color: #64748b;
-}
-/* ============= 触屏虚拟摇杆 ============= */
-.touch-controls {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 10px 16px 20px;
-  z-index: 100;
-  pointer-events: none;
-}
-.touch-controls > * {
-  pointer-events: auto;
-}
-.dpad {
-  display: grid;
-  grid-template-columns: repeat(3, 52px);
-  grid-template-rows: repeat(3, 52px);
-  gap: 3px;
-}
-.dpad-row {
-  display: contents;
-}
-.dpad-btn {
-  width: 52px;
-  height: 52px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
-  touch-action: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.08s, transform 0.08s;
-}
-.dpad-btn[data-dir='up']    { grid-column: 2; grid-row: 1; }
-.dpad-btn[data-dir='left']  { grid-column: 1; grid-row: 2; }
-.dpad-btn[data-dir='right'] { grid-column: 3; grid-row: 2; }
-.dpad-btn[data-dir='down']  { grid-column: 2; grid-row: 3; }
-.dpad-center {
-  grid-column: 2;
-  grid-row: 2;
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-}
-.dpad-btn:active,
-.dpad-btn.pressed {
-  background: rgba(74, 222, 128, 0.35);
-  border-color: rgba(74, 222, 128, 0.5);
-  transform: scale(0.90);
-}
-.action-btns {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.fire-btn {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  border: 3px solid rgba(251, 191, 36, 0.45);
-  background: rgba(239, 68, 68, 0.25);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  font-size: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
-  touch-action: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.08s, transform 0.08s;
-}
-.fire-btn:active,
-.fire-btn.pressed {
-  background: rgba(239, 68, 68, 0.55);
-  border-color: rgba(251, 191, 36, 0.8);
-  transform: scale(0.88);
-}
-.restart-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
-  touch-action: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.restart-btn:active {
-  background: rgba(74, 222, 128, 0.3);
-  transform: scale(0.88);
-}
-@media (hover: hover) and (pointer: fine) {
-  body { padding-bottom: 20px; }
-  .touch-controls { opacity: 0.25; }
-  .touch-controls:hover { opacity: 0.7; }
-}
-@media (max-width: 420px) {
-  .touch-controls { padding: 6px 8px 14px; }
-  .dpad { grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(3, 46px); gap: 2px; }
-  .dpad-btn, .dpad-center { width: 46px; height: 46px; }
-  .fire-btn { width: 62px; height: 62px; font-size: 26px; }
-  .restart-btn { width: 38px; height: 38px; font-size: 17px; }
-}
+.tip { font-size: 13px; color: #64748b; }
+
 /* 通用按钮样式 */
 .ui-btn {
   margin-top: 10px;
@@ -205,11 +68,8 @@ canvas {
   justify-content: center;
   z-index: 100;
 }
-
-/* 隐藏状态 */
 .hidden { display: none !important; }
 
-/* 弹窗内容区域 */
 .modal-content {
   background: #1e293b;
   padding: 25px 30px;
@@ -218,56 +78,91 @@ canvas {
   min-width: 280px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
-
-.modal-content h2 {
-  font-size: 22px;
-  margin-bottom: 5px;
-  color: #f8fafc;
-}
-
+.modal-content h2 { font-size: 22px; margin-bottom: 5px; color: #f8fafc; }
 .modal-content input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #475569;
-  background: #0f172a;
-  color: white;
-  font-size: 16px;
-  text-align: center;
+  width: 100%; padding: 10px; border-radius: 6px;
+  border: 1px solid #475569; background: #0f172a;
+  color: white; font-size: 16px; text-align: center;
 }
 
-/* 排行榜列表样式 */
 #leaderboard-list {
-  list-style: none;
-  margin: 15px 0;
-  text-align: left;
-  max-height: 200px;
-  overflow-y: auto;
+  list-style: none; margin: 15px 0;
+  text-align: left; max-height: 200px; overflow-y: auto;
 }
-
 #leaderboard-list li {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #334155;
-  color: #e2e8f0;
-  font-size: 15px;
+  display: flex; justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px solid #334155;
+  color: #e2e8f0; font-size: 15px;
 }
-
 #leaderboard-list li:first-child { color: #fde047; font-weight: bold; }
-/* 默认在所有设备上隐藏 */
-.mobile-controls {
-  display: none !important;
+
+/* ============= 触屏虚拟摇杆 ============= */
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 52px);
+  grid-template-rows: repeat(3, 52px);
+  gap: 3px;
 }
+.dpad-row { display: contents; }
+.dpad-btn {
+  width: 52px; height: 52px; border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px; background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.85); font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; user-select: none; touch-action: none;
+  -webkit-tap-highlight-color: transparent; transition: background 0.08s, transform 0.08s;
+}
+.dpad-btn[data-dir='up']    { grid-column: 2; grid-row: 1; }
+.dpad-btn[data-dir='left']  { grid-column: 1; grid-row: 2; }
+.dpad-btn[data-dir='right'] { grid-column: 3; grid-row: 2; }
+.dpad-btn[data-dir='down']  { grid-column: 2; grid-row: 3; }
+.dpad-center { grid-column: 2; grid-row: 2; width: 52px; height: 52px; border-radius: 12px; background: rgba(255, 255, 255, 0.03); }
+.dpad-btn:active, .dpad-btn.pressed { background: rgba(74, 222, 128, 0.35); border-color: rgba(74, 222, 128, 0.5); transform: scale(0.90); }
+
+.action-btns { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.fire-btn {
+  width: 72px; height: 72px; border-radius: 50%;
+  border: 3px solid rgba(251, 191, 36, 0.45); background: rgba(239, 68, 68, 0.25);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: #fff; font-size: 30px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; user-select: none; touch-action: none; -webkit-tap-highlight-color: transparent; transition: background 0.08s, transform 0.08s;
+}
+.fire-btn:active, .fire-btn.pressed { background: rgba(239, 68, 68, 0.55); border-color: rgba(251, 191, 36, 0.8); transform: scale(0.88); }
+
+.restart-btn {
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+  color: rgba(255, 255, 255, 0.6); font-size: 20px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; user-select: none; touch-action: none; -webkit-tap-highlight-color: transparent;
+}
+.restart-btn:active { background: rgba(74, 222, 128, 0.3); transform: scale(0.88); }
+
+/* 默认在所有设备上隐藏虚拟按键 */
+.touch-controls { display: none !important; }
 
 /* 仅在手机屏幕（宽度小于768px）上显示虚拟按键 */
 @media screen and (max-width: 768px) {
+  body { padding-bottom: 140px; }
   .touch-controls {
     display: flex !important;
     justify-content: space-between;
     width: 100%;
-    position: absolute;
+    position: fixed;
     bottom: 20px;
+    left: 0;
+    right: 0;
     padding: 0 20px;
+    z-index: 100;
+    pointer-events: none;
   }
+  .touch-controls > * { pointer-events: auto; }
+}
+
+@media (max-width: 420px) {
+  .touch-controls { padding: 6px 8px 14px; }
+  .dpad { grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(3, 46px); gap: 2px; }
+  .dpad-btn, .dpad-center { width: 46px; height: 46px; }
+  .fire-btn { width: 62px; height: 62px; font-size: 26px; }
+  .restart-btn { width: 38px; height: 38px; font-size: 17px; }
 }

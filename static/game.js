@@ -394,7 +394,7 @@
           player = makePlayer();
           player.shield = 2;
         } else {
-          state = 'over';
+          // 这里什么都不写，让下面的统一判定来处理
         }
       }
     }
