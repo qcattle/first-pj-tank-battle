@@ -1,9 +1,8 @@
-() => {
+(() => {
   'use strict';
 
-  // ================= 配置 =================
-  const TILE = 40;            // 格子大小
-  const COLS = 20, ROWS = 15; // 地图尺寸
+  const TILE = 40;
+  const COLS = 20, ROWS = 15;
   const W = COLS * TILE, H = ROWS * TILE;
 
   const TANK_SIZE = 32;
@@ -14,11 +13,10 @@
 
   const MAX_ENEMIES_ALIVE = 3;
   const TOTAL_ENEMIES = 10;
-  const PLAYER_LIVES = 1  ;
+  const PLAYER_LIVES = 1;  // 一条命！
   const RESPAWN_DELAY = 1.5;
   const ENEMY_SPAWN_DELAY = 2.0;
 
-  // 地图：. 空地  B 砖墙(可打掉)  S 钢墙(打不掉)
   const MAP_STR = [
     '....................',
     '..BB..BB....BB..BB..',
@@ -51,9 +49,7 @@
     { x: 684, y: 4 },
   ];
 
-  // ================= 状态 =================
   const canvas = document.getElementById('game');
-    // 新增：排行榜相关的 DOM 元素
   const leaderboardBtn = document.getElementById('leaderboard-btn');
   const leaderboardModal = document.getElementById('leaderboard-modal');
   const leaderboardList = document.getElementById('leaderboard-list');
@@ -63,7 +59,6 @@
   const saveScoreBtn = document.getElementById('save-score-btn');
   const closeModalBtn = document.getElementById('close-modal-btn');
 
-  // 新增：本地排行榜工具函数
   function getLeaderboard() {
     return JSON.parse(localStorage.getItem('tankLeaderboard') || '[]');
   }
@@ -79,7 +74,6 @@
   let spawnTimer, respawnTimer, state;
   const keys = {};
 
-  // ================= 工具 =================
   function rectsOverlap(a, b) {
     return a.x < b.x + b.w && a.x + a.w > b.x &&
            a.y < b.y + b.h && a.y + a.h > b.y;
@@ -112,13 +106,12 @@
     return false;
   }
 
-  // ================= 初始化 =================
   saveScoreBtn.addEventListener('click', () => {
     const name = playerNameInput.value.trim() || '游客';
     const lb = getLeaderboard();
     lb.push({ name, score });
-    lb.sort((a, b) => b.score - a.score); // 按分数从高到低排序
-    saveLeaderboard(lb.slice(0, 10)); // 只保留前 10 名
+    lb.sort((a, b) => b.score - a.score);
+    saveLeaderboard(lb.slice(0, 10));
     nameInputModal.classList.add('hidden');
     renderLeaderboard();
     leaderboardModal.classList.remove('hidden');
@@ -194,9 +187,7 @@
     };
   }
 
-  // ================= 移动 =================
   function tryMove(t, dir, dt) {
-    // 转向时对齐格子，方便钻窄道
     if (t.dir !== dir) {
       const off = (TILE - t.size) / 2;
       let ax = t.x, ay = t.y;
@@ -222,7 +213,6 @@
     return false;
   }
 
-  // ================= 射击 =================
   function shoot(t) {
     if (t.cooldown > 0) return;
     t.cooldown = t.isPlayer ? 0.32 : 1.1;
@@ -242,7 +232,6 @@
     });
   }
 
-  // ================= 粒子 =================
   function addParticles(x, y, color, count = 10) {
     for (let i = 0; i < count; i++) {
       const a = Math.random() * Math.PI * 2;
@@ -269,18 +258,15 @@
     particles = particles.filter(p => p.life > 0);
   }
 
-  // ================= 子弹逻辑 =================
   function checkBulletHit(b) {
     const cx = b.x + b.size / 2;
     const cy = b.y + b.size / 2;
 
-    // 出界
     if (cx < 0 || cy < 0 || cx > W || cy > H) {
       b.alive = false;
       return;
     }
 
-    // 打地形
     const c = Math.floor(cx / TILE);
     const r = Math.floor(cy / TILE);
     if (r >= 0 && r < ROWS && c >= 0 && c < COLS) {
@@ -298,7 +284,6 @@
       }
     }
 
-    // 打坦克
     if (b.owner === 'player') {
       for (const e of enemies) {
         if (!e.alive) continue;
@@ -323,7 +308,6 @@
       }
     }
 
-    // 子弹对撞
     for (const o of bullets) {
       if (o === b || !o.alive || o.owner === b.owner) continue;
       if (Math.abs(o.x - b.x) < 10 && Math.abs(o.y - b.y) < 10) {
@@ -349,7 +333,6 @@
     bullets = bullets.filter(b => b.alive);
   }
 
-  // ================= 敌人 AI =================
   function updateEnemy(e, dt) {
     e.cooldown = Math.max(0, e.cooldown - dt);
     e.thinkTimer -= dt;
@@ -375,7 +358,6 @@
     if (e.cooldown <= 0 && Math.random() < dt * 1.4) shoot(e);
   }
 
-  // ================= 生成敌人 =================
   function spawnEnemy() {
     const free = SPAWN_POINTS.filter(p =>
       !tankBlocked({ size: TANK_SIZE, isPlayer: false }, p.x, p.y)
@@ -387,14 +369,12 @@
     spawnedCount++;
   }
 
-  // ================= 主更新 =================
-function update(dt) {
+  function update(dt) {
     if (state !== 'playing') {
       updateParticles(dt);
       return;
     }
 
-    // 玩家
     if (player.alive) {
       player.cooldown = Math.max(0, player.cooldown - dt);
       if (player.shield > 0) player.shield -= dt;
@@ -419,36 +399,38 @@ function update(dt) {
       }
     }
 
-    // 敌人
     for (const e of enemies) updateEnemy(e, dt);
-
-    // 子弹
     updateBullets(dt);
-
-    // 粒子
     updateParticles(dt);
 
-    // 生成敌人
     spawnTimer -= dt;
     if (spawnTimer <= 0 && spawnedCount < TOTAL_ENEMIES && enemies.length < MAX_ENEMIES_ALIVE) {
       spawnEnemy();
       spawnTimer = ENEMY_SPAWN_DELAY;
     }
 
-    // 清理死亡敌人
     enemies = enemies.filter(e => e.alive);
 
-    // 胜利
-    if ((killedCount >= TOTAL_ENEMIES || lives <= 0) && state === 'playing') {
-      state = (killedCount >= TOTAL_ENEMIES) ? 'win' : 'over';
-      // 延迟一点弹出，让玩家看到结束画面
-      setTimeout(() => {
-        finalScoreSpan.textContent = score;
-        nameInputModal.classList.remove('hidden');
-        leaderboardBtn.style.display = 'block';
-      }, 800);
+    if (state === 'playing') {
+      if (killedCount >= TOTAL_ENEMIES) {
+        state = 'win';
+      }
+      if (lives <= 0 && !player.alive && respawnTimer <= 0) {
+        state = 'over';
+      }
+
+      if (state === 'win' || state === 'over') {
+        setTimeout(() => {
+          if (finalScoreSpan) finalScoreSpan.textContent = score;
+          if (nameInputModal) nameInputModal.classList.remove('hidden');
+          if (leaderboardBtn) leaderboardBtn.style.display = 'block';
+        }, 800);
+      }
     }
-  // ================= 绘制 =================
+
+    updateHUD();
+  }
+
   function drawBrick(x, y) {
     ctx.fillStyle = '#9a3412';
     ctx.fillRect(x, y, TILE, TILE);
@@ -484,25 +466,20 @@ function update(dt) {
     const body = t.isPlayer ? '#22c55e' : '#ef4444';
     const track = t.isPlayer ? '#15803d' : '#7f1d1d';
 
-    // 履带
     ctx.fillStyle = track;
     ctx.fillRect(-s / 2, -s / 2, s * 0.22, s);
     ctx.fillRect(s / 2 - s * 0.22, -s / 2, s * 0.22, s);
 
-    // 车身
     ctx.fillStyle = body;
     ctx.fillRect(-s * 0.28, -s * 0.38, s * 0.56, s * 0.76);
 
-    // 炮塔
     ctx.beginPath();
     ctx.arc(0, 0, s * 0.2, 0, Math.PI * 2);
     ctx.fill();
 
-    // 炮管
     ctx.fillStyle = '#e5e7eb';
     ctx.fillRect(-s * 0.07, -s * 0.58, s * 0.14, s * 0.42);
 
-    // 护盾
     if (t.isPlayer && t.shield > 0) {
       ctx.strokeStyle = 'rgba(96,165,250,0.85)';
       ctx.lineWidth = 2;
@@ -534,11 +511,9 @@ function update(dt) {
   }
 
   function render() {
-    // 背景
     ctx.fillStyle = '#111827';
     ctx.fillRect(0, 0, W, H);
 
-    // 网格
     ctx.strokeStyle = 'rgba(255,255,255,0.03)';
     ctx.lineWidth = 1;
     for (let c = 1; c < COLS; c++) {
@@ -548,7 +523,6 @@ function update(dt) {
       ctx.beginPath(); ctx.moveTo(0, r * TILE); ctx.lineTo(W, r * TILE); ctx.stroke();
     }
 
-    // 地形
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
         const v = grid[r][c];
@@ -557,7 +531,6 @@ function update(dt) {
       }
     }
 
-    // 粒子
     for (const p of particles) {
       ctx.globalAlpha = Math.max(0, Math.min(1, p.life * 2.5));
       ctx.fillStyle = p.color;
@@ -565,11 +538,9 @@ function update(dt) {
     }
     ctx.globalAlpha = 1;
 
-    // 坦克
     for (const e of enemies) drawTank(e);
     if (player.alive) drawTank(player);
 
-    // 子弹
     for (const b of bullets) {
       ctx.fillStyle = b.owner === 'player' ? '#fde047' : '#fb923c';
       ctx.beginPath();
@@ -577,20 +548,16 @@ function update(dt) {
       ctx.fill();
     }
 
-    // 结算
     if (state === 'over') drawOverlay('游戏结束', `得分 ${score}`, '按 R 重新开始');
     if (state === 'win')  drawOverlay('胜  利', `得分 ${score}`, '按 R 再来一局');
   }
 
-  // ================= HUD =================
   function updateHUD() {
     document.getElementById('score').textContent = score;
     document.getElementById('lives').textContent = Math.max(0, lives);
     document.getElementById('left').textContent = Math.max(0, TOTAL_ENEMIES - killedCount);
   }
 
-  
-  // ================= 触屏控制 =================
   function setupTouchControls() {
     const dirKeyMap = {
       up:    'ArrowUp',
@@ -599,7 +566,6 @@ function update(dt) {
       right: 'ArrowRight',
     };
 
-    // ---------- 方向按钮 ----------
     document.querySelectorAll('.dpad-btn').forEach(btn => {
       const dir = btn.dataset.dir;
       const key = dirKeyMap[dir];
@@ -624,7 +590,6 @@ function update(dt) {
       btn.addEventListener('mouseleave', release);
     });
 
-    // ---------- 射击按钮 ----------
     const fireBtn = document.getElementById('fireBtn');
     if (fireBtn) {
       function pressFire(e) {
@@ -646,7 +611,6 @@ function update(dt) {
       fireBtn.addEventListener('mouseleave', releaseFire);
     }
 
-    // ---------- 重启按钮 ----------
     const restartBtn = document.getElementById('restartBtn');
     if (restartBtn) {
       restartBtn.addEventListener('click', e => {
@@ -657,17 +621,14 @@ function update(dt) {
       });
     }
 
-    // ---------- 阻止画布上的默认触摸行为 ----------
     const canvas = document.getElementById('game');
     canvas.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
     canvas.addEventListener('touchmove',  e => e.preventDefault(), { passive: false });
     canvas.addEventListener('touchend',   e => e.preventDefault(), { passive: false });
   }
 
-  // 启动触屏控制
   setupTouchControls();
 
-// ================= 输入 =================
   window.addEventListener('keydown', e => {
     keys[e.code] = true;
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
@@ -682,10 +643,9 @@ function update(dt) {
     keys[e.code] = false;
   });
 
-  // ================= 主循环 =================
-let lastTime = 0;
+  let lastTime = 0;
 
-function loop(ts) {
+  function loop(ts) {
     if (!lastTime) lastTime = ts;
     let dt = (ts - lastTime) / 1000;
     lastTime = ts;
