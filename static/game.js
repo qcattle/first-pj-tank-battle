@@ -1,4 +1,4 @@
-(() => {
+() => {
   'use strict';
 
   // ================= 配置 =================
@@ -14,7 +14,7 @@
 
   const MAX_ENEMIES_ALIVE = 3;
   const TOTAL_ENEMIES = 10;
-  const PLAYER_LIVES = 1;
+  const PLAYER_LIVES = 1  ;
   const RESPAWN_DELAY = 1.5;
   const ENEMY_SPAWN_DELAY = 2.0;
 
@@ -388,7 +388,7 @@
   }
 
   // ================= 主更新 =================
-  function update(dt) {
+function update(dt) {
     if (state !== 'playing') {
       updateParticles(dt);
       return;
@@ -683,9 +683,9 @@
   });
 
   // ================= 主循环 =================
-  let lastTime = 0;
+let lastTime = 0;
 
-  function loop(ts) {
+function loop(ts) {
     if (!lastTime) lastTime = ts;
     let dt = (ts - lastTime) / 1000;
     lastTime = ts;
