@@ -16,6 +16,28 @@
 
     <canvas id="game"></canvas>
 
+    <!-- 排行榜按钮（游戏结束时出现） -->
+    <button id="leaderboard-btn" class="ui-btn" style="display:none;">🏆 查看排行榜</button>
+
+    <!-- 排行榜弹窗 -->
+    <div id="leaderboard-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>🏆 游客排行榜</h2>
+        <ul id="leaderboard-list"></ul>
+        <button id="close-modal-btn" class="ui-btn">关闭</button>
+      </div>
+    </div>
+
+    <!-- 输入名字弹窗 -->
+    <div id="name-input-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>🎉 你的分数是 <span id="final-score">0</span></h2>
+        <p style="margin: 10px 0; font-size: 14px; color: #94a3b8;">请输入你的名字保存到排行榜：</p>
+        <input type="text" id="player-name-input" maxlength="10" placeholder="游客" value="游客">
+        <button id="save-score-btn" class="ui-btn" style="margin-top: 15px;">保存分数</button>
+      </div>
+    </div>
+
     <div class="tip">方向键 移动 · 空格 射击 · R 重新开始</div>
   </div>
 

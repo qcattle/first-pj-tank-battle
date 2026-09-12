@@ -14,7 +14,7 @@
 
   const MAX_ENEMIES_ALIVE = 3;
   const TOTAL_ENEMIES = 10;
-  const PLAYER_LIVES = 3;
+  const PLAYER_LIVES = 1;
   const RESPAWN_DELAY = 1.5;
   const ENEMY_SPAWN_DELAY = 2.0;
 
@@ -53,6 +53,23 @@
 
   // ================= 状态 =================
   const canvas = document.getElementById('game');
+    // 新增：排行榜相关的 DOM 元素
+  const leaderboardBtn = document.getElementById('leaderboard-btn');
+  const leaderboardModal = document.getElementById('leaderboard-modal');
+  const leaderboardList = document.getElementById('leaderboard-list');
+  const nameInputModal = document.getElementById('name-input-modal');
+  const finalScoreSpan = document.getElementById('final-score');
+  const playerNameInput = document.getElementById('player-name-input');
+  const saveScoreBtn = document.getElementById('save-score-btn');
+  const closeModalBtn = document.getElementById('close-modal-btn');
+
+  // 新增：本地排行榜工具函数
+  function getLeaderboard() {
+    return JSON.parse(localStorage.getItem('tankLeaderboard') || '[]');
+  }
+  function saveLeaderboard(data) {
+    localStorage.setItem('tankLeaderboard', JSON.stringify(data));
+  }
   const ctx = canvas.getContext('2d');
   canvas.width = W;
   canvas.height = H;
@@ -96,6 +113,40 @@
   }
 
   // ================= 初始化 =================
+  saveScoreBtn.addEventListener('click', () => {
+    const name = playerNameInput.value.trim() || '游客';
+    const lb = getLeaderboard();
+    lb.push({ name, score });
+    lb.sort((a, b) => b.score - a.score); // 按分数从高到低排序
+    saveLeaderboard(lb.slice(0, 10)); // 只保留前 10 名
+    nameInputModal.classList.add('hidden');
+    renderLeaderboard();
+    leaderboardModal.classList.remove('hidden');
+  });
+
+  leaderboardBtn.addEventListener('click', () => {
+    renderLeaderboard();
+    leaderboardModal.classList.remove('hidden');
+  });
+
+  closeModalBtn.addEventListener('click', () => {
+    leaderboardModal.classList.add('hidden');
+  });
+
+  function renderLeaderboard() {
+    const lb = getLeaderboard();
+    leaderboardList.innerHTML = '';
+    if (lb.length === 0) {
+      leaderboardList.innerHTML = '<li style="justify-content:center;color:#64748b;">暂无记录，快来创造记录吧！</li>';
+      return;
+    }
+    lb.forEach((item, index) => {
+      const li = document.createElement('li');
+      const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+      li.innerHTML = `<span>${medal} ${item.name}</span><span>${item.score} 分</span>`;
+      leaderboardList.appendChild(li);
+    });
+  }
   function initGame() {
     grid = MAP_STR.map(row =>
       row.split('').map(ch => (ch === 'B' ? 1 : ch === 'S' ? 2 : 0))
@@ -388,11 +439,15 @@
     enemies = enemies.filter(e => e.alive);
 
     // 胜利
-    if (killedCount >= TOTAL_ENEMIES) state = 'win';
-
-    updateHUD();
-  }
-
+    if ((killedCount >= TOTAL_ENEMIES || lives <= 0) && state === 'playing') {
+      state = (killedCount >= TOTAL_ENEMIES) ? 'win' : 'over';
+      // 延迟一点弹出，让玩家看到结束画面
+      setTimeout(() => {
+        finalScoreSpan.textContent = score;
+        nameInputModal.classList.remove('hidden');
+        leaderboardBtn.style.display = 'block';
+      }, 800);
+    }
   // ================= 绘制 =================
   function drawBrick(x, y) {
     ctx.fillStyle = '#9a3412';

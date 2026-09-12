@@ -180,3 +180,94 @@ canvas {
   .fire-btn { width: 62px; height: 62px; font-size: 26px; }
   .restart-btn { width: 38px; height: 38px; font-size: 17px; }
 }
+/* 通用按钮样式 */
+.ui-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #4ade80;
+  color: #0f172a;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.ui-btn:hover { opacity: 0.8; }
+
+/* 弹窗背景遮罩 */
+.modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+/* 隐藏状态 */
+.hidden { display: none !important; }
+
+/* 弹窗内容区域 */
+.modal-content {
+  background: #1e293b;
+  padding: 25px 30px;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 280px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content h2 {
+  font-size: 22px;
+  margin-bottom: 5px;
+  color: #f8fafc;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #475569;
+  background: #0f172a;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* 排行榜列表样式 */
+#leaderboard-list {
+  list-style: none;
+  margin: 15px 0;
+  text-align: left;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#leaderboard-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #334155;
+  color: #e2e8f0;
+  font-size: 15px;
+}
+
+#leaderboard-list li:first-child { color: #fde047; font-weight: bold; }
+/* 默认在所有设备上隐藏 */
+.mobile-controls {
+  display: none !important;
+}
+
+/* 仅在手机屏幕（宽度小于768px）上显示虚拟按键 */
+@media screen and (max-width: 768px) {
+  .touch-controls {
+    display: flex !important;
+    justify-content: space-between;
+    width: 100%;
+    position: absolute;
+    bottom: 20px;
+    padding: 0 20px;
+  }
+}
